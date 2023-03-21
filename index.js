@@ -5,7 +5,8 @@ const app = express(); //initiating object + inovking the function
 const dotenv = require("dotenv").config(); //inovking the function
 const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
-const bodyParser = require("body-parser");
+const bodyParser = require("body-parser"); //node built in module
+const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
 dbConnect();
 
@@ -13,9 +14,10 @@ dbConnect();
 // app.use("/", (req, res) => {
 //   res.send("hello from seerve side");
 // });
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/api/v1/user", authRouter);
+app.use("/api/v1/user", authRouter); //after authRouter we need to pass our middleware
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`server is running on PORT ${PORT}`));
